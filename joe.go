@@ -2,7 +2,6 @@ package main
 
 import (
   "fmt"
-  "github.com/codegangsta/cli"
   "io/ioutil"
   "log"
   "os"
@@ -10,6 +9,8 @@ import (
   "path/filepath"
   "sort"
   "strings"
+
+  "github.com/urfave/cli"
 )
 
 const joe string = `
@@ -25,8 +26,8 @@ const joe string = `
 ▐░░░░░░░▌    ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌
  ▀▀▀▀▀▀▀      ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀ 
 `
-const version string = "1.0.0"
-const gitignoreUrl = "https://github.com/github/gitignore/archive/master.zip"
+const version string = "1.0.3"
+const gitignoreURL = "https://github.com/github/gitignore/archive/master.zip"
 const dataDir string = ".joe-data"
 
 var dataPath = path.Join(os.Getenv("HOME"), dataDir)
@@ -55,7 +56,7 @@ func availableFiles() (a []string, err error) {
   }
 
   availableGitignores := []string{}
-  for key, _ := range gitignores {
+  for key := range gitignores {
     availableGitignores = append(availableGitignores, key)
   }
 
@@ -78,7 +79,7 @@ func generate(args string) {
       if err == nil {
         output += "\n#### " + name + " ####\n"
         output += string(bytes)
-        if index < len(names) - 1 {
+        if index < len(names)-1 {
           output += "\n"
         }
         continue
@@ -132,7 +133,7 @@ func main() {
         if err != nil {
           log.Fatal(err)
         }
-        err = DownloadFiles(gitignoreUrl, dataPath)
+        err = DownloadFiles(gitignoreURL, dataPath)
         if err != nil {
           log.Fatal(err)
           return err
